@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Jadwal lapangan Jo Padel (Jo Bawah & Jo Atas): lihat slot kosong dan sesi main bareng.">
+<title>Jo Padel · Jadwal Lapangan</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: panel lapangan malam di atas (hero), strip tanggal 14 hari, lalu grid jam × lapangan. Lembar bawah untuk detail & edit. */
+:root{
+  --bg:#edf2f5; --surface:#ffffff; --surface-2:#f5f8fa; --line:#d5dfe6; --fg:#0f2233; --muted:#5d7182;
+  --court:#1d5b98; --court-ink:#ffffff; --court-soft:#dce8f4;
+  --night:#0c2238; --night-2:#123150; --night-line:rgba(255,255,255,.22); --night-fg:#eef5fb; --night-muted:#9fb7cc;
+  --ball:#d6e637; --ball-ink:#283000;
+  --free:#1f8a55; --free-soft:#e3f4ea;
+  --closed:#8a97a3; --danger:#b3261e;
+  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:12px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#08131d; --surface:#0f1e2b; --surface-2:#132635; --line:#213a4f; --fg:#e4eef6; --muted:#8fa6ba;
+  --court:#5c9ee3; --court-ink:#06121c; --court-soft:#16304a;
+  --night:#0b2036; --night-2:#112d49; --night-line:rgba(255,255,255,.18); --night-fg:#eef5fb; --night-muted:#9fb7cc;
+  --free:#5cd193; --free-soft:#10291d; --closed:#6b7b89; --danger:#f2867e; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#08131d; --surface:#0f1e2b; --surface-2:#132635; --line:#213a4f; --fg:#e4eef6; --muted:#8fa6ba;
+  --court:#5c9ee3; --court-ink:#06121c; --court-soft:#16304a;
+  --night:#0b2036; --night-2:#112d49; --night-line:rgba(255,255,255,.18); --night-fg:#eef5fb; --night-muted:#9fb7cc;
+  --free:#5cd193; --free-soft:#10291d; --closed:#6b7b89; --danger:#f2867e; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.45}
+button{font:inherit;color:inherit}
+#app{max-width:920px;margin:0 auto;padding-inline:16px;padding-block:20px 80px;display:flex;flex-direction:column;gap:20px}
+:focus-visible{outline:2px solid var(--court);outline-offset:2px}
+
+/* Hero */
+.hero{position:relative;overflow:hidden;border-radius:18px;background:linear-gradient(160deg,var(--night-2),var(--night) 60%);color:var(--night-fg);padding:22px 22px 20px;display:flex;flex-direction:column;gap:18px}
+.hero svg.lines{position:absolute;right:-30px;top:-20px;width:320px;height:auto;opacity:.9;pointer-events:none}
+.hero svg.lines rect,.hero svg.lines line{fill:none;stroke:var(--night-line);stroke-width:2}
+.hero svg.lines .glass{stroke:rgba(255,255,255,.35);stroke-width:5}
+.hero svg.lines circle{fill:var(--ball)}
+.hero-top{position:relative;display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ball)}
+.hero h1{font-family:var(--display);font-weight:800;font-size:clamp(2.4rem,7vw,3.6rem);line-height:.92;margin:6px 0 0;text-transform:uppercase;letter-spacing:.01em;text-wrap:balance}
+.hours-tag{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px;font-size:.85rem;color:var(--night-muted)}
+.hours-tag b{white-space:nowrap;color:var(--night-fg);font-variant-numeric:tabular-nums}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ball);box-shadow:0 0 0 4px rgba(214,230,55,.18)}
+.hero-stats{position:relative;display:flex;gap:16px 28px;flex-wrap:wrap;align-items:flex-end}
+.stat b{display:block;font-family:var(--display);font-weight:800;font-size:3rem;line-height:.9;font-variant-numeric:tabular-nums}
+.stat b.free{color:var(--ball)}
+.stat span{font-size:.8rem;color:var(--night-muted)}
+.hero-actions{display:flex;gap:8px;flex-wrap:wrap}
+.hbtn{border:1px solid var(--night-line);background:rgba(255,255,255,.06);color:var(--night-fg);border-radius:999px;padding:8px 14px;font-weight:600;font-size:.85rem;cursor:pointer}
+.hbtn:hover{background:rgba(255,255,255,.12)}
+.hbtn.ball{background:var(--ball);color:var(--ball-ink);border-color:var(--ball)}
+
+/* Date strip */
+.dates{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x proximity;scrollbar-width:thin}
+.date{flex:none;scroll-snap-align:start;width:68px;border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:8px 4px 9px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px}
+.date .dw{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.date .dn{font-family:var(--display);font-weight:800;font-size:1.7rem;line-height:1}
+.date .dm{font-size:.7rem;color:var(--muted)}
+.date .df{margin-top:4px;font-size:.68rem;font-weight:700;color:var(--free);background:var(--free-soft);border-radius:999px;padding:1px 7px;font-variant-numeric:tabular-nums}
+.date .df.none{color:var(--muted);background:var(--surface-2)}
+.date.on{background:var(--court);border-color:var(--court);color:var(--court-ink)}
+.date.on .dw,.date.on .dm{color:var(--court-ink);opacity:.8}
+.date.on .df{background:var(--ball);color:var(--ball-ink)}
+
+/* Board */
+.board-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.board-head h2{font-family:var(--display);font-size:1.7rem;font-weight:800;text-transform:uppercase;margin:0;letter-spacing:.02em}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:.78rem;color:var(--muted)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:4px;vertical-align:-2px;margin-right:5px}
+.legend .lf{background:var(--free-soft);border:1.5px dashed var(--free)}
+.legend .lb{background:var(--court)}
+.legend .lm{background:var(--ball)}
+.legend .lc{background:repeating-linear-gradient(45deg,var(--line) 0 3px,var(--surface-2) 3px 7px)}
+.board-wrap{overflow-x:auto;border-radius:var(--r);border:1px solid var(--line);background:var(--surface)}
+.board{display:grid;gap:4px;padding:8px;min-width:min-content}
+.court-h{position:sticky;top:env(safe-area-inset-top,0px);z-index:2;background:var(--surface);padding:6px 4px 8px;font-family:var(--display);font-weight:800;font-size:1.05rem;text-transform:uppercase;letter-spacing:.04em;text-align:center;border-bottom:2px solid var(--fg)}
+.hr{font-family:var(--display);font-weight:700;font-size:.95rem;color:var(--muted);font-variant-numeric:tabular-nums;padding:6px 4px 0 2px;text-align:right}
+.hr.now{color:var(--court)}
+.cell{border-radius:9px;min-height:50px;border:1.5px dashed transparent;padding:6px 9px;text-align:left;cursor:pointer;display:flex;flex-direction:column;justify-content:center;gap:2px;min-width:0;transition:transform .12s ease}
+.cell.free{background:var(--free-soft);border-color:color-mix(in srgb,var(--free) 45%,transparent);color:var(--free)}
+.cell.free .t{font-weight:700;font-size:.82rem}
+.cell.free .s{font-size:.72rem;opacity:.8}
+.cell.free:hover{border-style:solid}
+.cell.past{background:var(--surface-2);color:var(--muted);border-color:transparent;cursor:default;font-size:.75rem}
+.cell.blk{border:none;justify-content:flex-start;padding:9px 11px;gap:3px;box-shadow:0 1px 0 rgba(0,0,0,.06)}
+.cell.blk .k{font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.85}
+.cell.blk .n{font-weight:700;font-size:.92rem;line-height:1.2;overflow-wrap:anywhere}
+.cell.blk .s{font-size:.75rem;opacity:.85;font-variant-numeric:tabular-nums}
+.cell.booked{background:var(--court);color:var(--court-ink)}
+.cell.mabar{background:var(--ball);color:var(--ball-ink)}
+.cell.closed{background:repeating-linear-gradient(45deg,var(--line) 0 4px,var(--surface-2) 4px 10px);color:var(--muted)}
+.cell.ex{outline:2px dashed var(--danger);outline-offset:-3px}
+.pips{display:flex;gap:4px;margin-top:3px}
+.pip{width:9px;height:9px;border-radius:50%;background:var(--ball-ink)}
+.pip.o{background:transparent;border:1.5px solid var(--ball-ink)}
+@media (prefers-reduced-motion:no-preference){.cell:not(.past):hover{transform:translateY(-1px)}}
+
+.sites{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:14px}
+.site{border:1.5px solid var(--line);background:var(--surface);border-radius:14px;padding:10px 14px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:1px}
+.site b{font-family:var(--display);font-weight:800;font-size:1.4rem;text-transform:uppercase;letter-spacing:.02em;line-height:1.05}
+.site span{font-size:.78rem;color:var(--muted)}
+.site.on{border-color:var(--court);background:var(--court-soft);box-shadow:inset 0 -3px 0 var(--court)}
+.past-tog{width:100%;margin:10px 0 0;border:1px dashed var(--line);background:transparent;color:var(--muted);border-radius:10px;padding:8px;font-weight:600;font-size:.85rem;cursor:pointer}
+.past-tog:hover{color:var(--fg)}
+.admin-note{font-size:.82rem;color:var(--muted);text-align:center}
+.admin-note b{color:var(--court)}
+.ex-note{font-size:.82rem;color:var(--danger);text-align:center}
+
+/* Sheet */
+.scrim{position:fixed;inset:0;background:rgba(5,14,22,.55);z-index:10;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--surface);color:var(--fg);width:100%;max-width:560px;max-height:88vh;overflow-y:auto;border-radius:20px 20px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:14px}
+@media (min-width:640px){.scrim{align-items:center}.sheet{border-radius:20px}}
+.sheet h3{font-family:var(--display);font-weight:800;font-size:1.7rem;text-transform:uppercase;margin:0;line-height:1}
+.sheet .when{color:var(--muted);font-size:.9rem;margin-top:4px}
+.sheet .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.sheet label{display:flex;flex-direction:column;gap:4px;font-size:.78rem;font-weight:600;color:var(--muted);min-width:0}
+.sheet .wide{grid-column:1/-1}
+.sheet input,.sheet select,.sheet textarea{font:400 .95rem var(--body);color:var(--fg);background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:9px 10px;width:100%;min-width:0}
+.sheet textarea{min-height:60px;resize:vertical}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{flex:1;min-width:90px;border:1.5px solid var(--line);background:var(--surface-2);border-radius:10px;padding:9px;font-weight:700;cursor:pointer}
+.seg button.on[data-v="booked"]{background:var(--court);border-color:var(--court);color:var(--court-ink)}
+.seg button.on[data-v="mabar"]{background:var(--ball);border-color:var(--ball);color:var(--ball-ink)}
+.seg button.on[data-v="closed"]{background:var(--closed);border-color:var(--closed);color:var(--surface)}
+.hint{font-weight:400}
+.btns{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 16px;font-weight:700;cursor:pointer}
+.btn.primary{background:var(--court);border-color:var(--court);color:var(--court-ink)}
+.btn.danger{color:var(--danger);margin-right:auto}
+.btn[disabled]{opacity:.55;cursor:wait}
+.err{color:var(--danger);font-size:.86rem;margin:0}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+.facts div{background:var(--surface-2);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column}
+.facts span{font-size:.72rem;color:var(--muted);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.facts b{font-size:1rem}
+.players{display:flex;gap:6px;flex-wrap:wrap}
+.pl{padding:4px 10px;border-radius:999px;background:var(--court-soft);font-size:.85rem}
+.pl.o{background:transparent;border:1.5px dashed var(--free);color:var(--free)}
+.contact{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:var(--surface-2);border-radius:10px;padding:10px 12px}
+.contact code{font:600 1rem var(--body);user-select:all;flex:1}
+.msg{font-size:.88rem;background:var(--surface-2);border-radius:10px;padding:10px 12px;user-select:all}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:.9rem;z-index:20;max-width:calc(100% - 32px)}
+@media (max-width:520px){.sheet .grid{grid-template-columns:1fr}.hero svg.lines{width:220px;right:-50px}.stat b{font-size:2.4rem}}
+
+/* Tabs & riwayat */
+.vtabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px}
+.vtabs button{flex:1;border:none;background:transparent;border-radius:9px;padding:9px;font-weight:700;cursor:pointer;color:var(--muted)}
+.vtabs button.on{background:var(--court);color:var(--court-ink)}
+.pb{align-self:flex-start;margin-top:3px;font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:4px;background:var(--surface);color:var(--danger)}
+.pb-paid{color:var(--free)}
+.pb-free{color:var(--ball-ink);background:var(--ball)}
+.modebar{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;margin-bottom:12px;font-size:.82rem;color:var(--muted)}
+.modebar>span{font-weight:700;color:var(--fg)}
+.modebar small{font-size:.76rem}
+.pseg.mode button.on{background:var(--court);color:var(--court-ink)}
+.hist{display:flex;flex-direction:column;gap:14px}
+.hsum{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.hsum div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column}
+.hsum b{font-family:var(--display);font-weight:800;font-size:2rem;line-height:1;font-variant-numeric:tabular-nums}
+.hsum span{font-size:.75rem;color:var(--muted)}
+.hsum .due b{color:var(--danger)}
+.hrule{margin:0;font-size:.85rem;color:var(--muted)}
+.hrule b{color:var(--fg)}
+.htools{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.htools input{flex:1;min-width:160px;font:400 .95rem var(--body);color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:9px 12px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip2{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:.82rem;font-weight:600;cursor:pointer;color:var(--muted)}
+.chip2.on{border-color:var(--court);color:var(--court);background:var(--court-soft)}
+.hlist{display:flex;flex-direction:column;gap:8px}
+.cust{background:var(--surface);border:1px solid var(--line);border-radius:14px}
+.cust[open]{border-color:var(--court)}
+.cust summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:8px 14px;padding:14px 16px;align-items:center}
+.cust summary::-webkit-details-marker{display:none}
+.cn{min-width:0;display:flex;flex-direction:column}
+.cn b{font-size:1.05rem;overflow-wrap:anywhere}
+.cn span{font-size:.8rem;color:var(--muted)}
+.due{color:var(--danger);font-style:normal;font-weight:600}
+.gift{color:var(--ball-ink);background:var(--ball);font-style:normal;font-weight:700;padding:0 6px;border-radius:4px}
+.ct{text-align:right;display:flex;align-items:baseline;gap:4px}
+.ct b{font-family:var(--display);font-weight:800;font-size:2.2rem;line-height:1;font-variant-numeric:tabular-nums}
+.ct span{font-size:.8rem;color:var(--muted)}
+.promo{grid-column:1/-1;display:flex;flex-direction:column;gap:5px}
+.promo span{font-size:.78rem;color:var(--muted)}
+.bar{height:8px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ball);border-radius:999px}
+.hrows{list-style:none;margin:0;padding:0 16px 12px;display:flex;flex-direction:column}
+.hrow{display:grid;grid-template-columns:1fr auto auto;gap:6px 12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.hd{min-width:0;display:flex;flex-direction:column}
+.hd b{font-size:.9rem}
+.hd span{font-size:.78rem;color:var(--muted)}
+.hh{font-weight:700;font-variant-numeric:tabular-nums}
+.pseg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.pseg button{border:none;background:var(--surface);padding:6px 10px;font-size:.78rem;font-weight:700;cursor:pointer;color:var(--muted)}
+.pseg button+button{border-left:1px solid var(--line)}
+.pseg button.on.p-unpaid{background:var(--danger);color:var(--surface)}
+.pseg button.on.p-paid{background:var(--free);color:var(--surface)}
+.pseg button.on.p-free{background:var(--ball);color:var(--ball-ink)}
+.pseg button[disabled]{opacity:.6;cursor:wait}
+.hnote{margin:0;padding:0 16px 12px;font-size:.78rem;color:var(--muted)}
+.hempty{text-align:center;padding:32px 16px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);font-size:.9rem}
+.hempty b{display:block;font-family:var(--display);font-size:1.4rem;color:var(--fg);text-transform:uppercase}
+@media (max-width:520px){.hsum{grid-template-columns:repeat(2,minmax(0,1fr))}.hrow{grid-template-columns:1fr auto}.hrow .pseg{grid-column:1/-1;justify-self:start}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script type="application/json" id="state">{"title": "Jo Padel", "open": 7, "close": 24, "contact": "", "bookings": [{"id": "b-yohan", "date": "2026-10-03", "court": "c1", "start": 9, "end": 11, "type": "booked", "label": "Yohan", "players": [], "capacity": 0, "note": "", "example": false}, {"id": "b-vira", "date": "2026-10-03", "court": "c2", "start": 9, "end": 11, "type": "booked", "label": "Vira", "players": [], "capacity": 0, "note": "", "example": false}, {"id": "b-heru", "date": "2026-10-03", "court": "c1", "start": 15, "end": 16, "type": "booked", "label": "Heru", "players": [], "capacity": 0, "note": "", "example": false}, {"id": "b-habib", "date": "2026-10-03", "court": "c1", "start": 16, "end": 17, "type": "booked", "label": "Abd Habib", "players": [], "capacity": 0, "note": "", "example": false}, {"id": "b-bosab", "date": "2026-10-03", "court": "c1", "start": 17, "end": 19, "type": "booked", "label": "Bos AB", "players": [], "capacity": 0, "note": "", "example": false}, {"id": "b-dimas", "date": "2026-10-03", "court": "c1", "start": 19, "end": 21, "type": "booked", "label": "Pak Dimas", "players": [], "capacity": 0, "note": "", "example": false}, {"id": "b-nowsky1", "date": "2026-10-03", "court": "c1", "start": 21, "end": 22, "type": "booked", "label": "Nowsky", "players": [], "capacity": 0, "note": "", "example": false}, {"id": "b-jeremy", "date": "2026-10-03", "court": "c2", "start": 16, "end": 18, "type": "booked", "label": "Jeremy", "players": [], "capacity": 0, "note": "", "example": false}, {"id": "b-nowsky2", "date": "2026-10-03", "court": "c2", "start": 18, "end": 20, "type": "booked", "label": "Nowsky", "players": [], "capacity": 0, "note": "", "example": false}, {"id": "b-roni", "date": "2026-10-03", "court": "c2", "start": 20, "end": 22, "type": "booked", "label": "Roni", "players": [], "capacity": 0, "note": "", "example": false}], "sites": [{"id": "bawah", "name": "Jo Bawah", "courts": [{"id": "c1", "name": "Lapangan 1"}, {"id": "c2", "name": "Lapangan 2"}]}, {"id": "atas", "name": "Jo Atas", "courts": [{"id": "c3", "name": "Lapangan 1"}]}], "promoEvery": 10, "promoFree": 1}</script>
+<script id="app-script">
+(function(){
+  var S = JSON.parse(document.getElementById('state').textContent);
+  var app = document.getElementById('app');
+  var showPast=false, isAdmin=false, art=null, saving=false, sheet=null, err='', confirmDel=false;
+  var HARI=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'], HR=['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+  var BULAN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  var TYPE={booked:'Booking',mabar:'Main bareng',closed:'Tutup'};
+
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function pad(n){return (n<10?'0':'')+n;}
+  function ds(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
+  function pd(s){var p=s.split('-');return new Date(+p[0],+p[1]-1,+p[2]);}
+  function today(){return ds(new Date());}
+  function hh(h){return pad(h)+'.00';}
+  function fmtDay(s){var d=pd(s);return HARI[d.getDay()]+', '+d.getDate()+' '+BULAN[d.getMonth()];}
+  var sel=today(), selSite=S.sites[0].id;
+  var _pp=null; try{_pp=sessionStorage.getItem('padel-pay');}catch(e){}
+  try{var ms=sessionStorage.getItem('padel-site'); if(ms && S.sites.some(function(x){return x.id===ms;})) selSite=ms;}catch(e){}
+  try{var m=sessionStorage.getItem('padel-sel'); if(m && m>=today()) sel=m;}catch(e){}
+
+  function allCourts(){var o=[];S.sites.forEach(function(st){st.courts.forEach(function(c){o.push({id:c.id,name:c.name,site:st.id,siteName:st.name});});});return o;}
+  function site(){return S.sites.filter(function(x){return x.id===selSite;})[0]||S.sites[0];}
+  function courtIds(){return allCourts().map(function(c){return c.id;});}
+  function dayBookings(date){var ids=courtIds();return S.bookings.filter(function(b){return b.date===date && ids.indexOf(b.court)>=0;});}
+  function nowHour(){return new Date().getHours();}
+  function isPastHour(date,h){var t=today(); if(date<t) return true; if(date>t) return false; return h<nowHour();}
+  function freeHours(date,courts){
+    var n=0, bs=dayBookings(date);
+    (courts||allCourts()).forEach(function(c){
+      for(var h=S.open;h<S.close;h++){
+        if(isPastHour(date,h)) continue;
+        var taken=bs.some(function(b){return b.court===c.id && h>=b.start && h<b.end;});
+        if(!taken) n++;
+      }
+    });
+    return n;
+  }
+  function days(){var out=[],d=pd(today());for(var i=0;i<14;i++){out.push(ds(d));d.setDate(d.getDate()+1);}if(out.indexOf(sel)<0)out.unshift(sel);return out;}
+
+  function heroHTML(){
+    var t=today(), free=freeHours(t), mabarOpen=0;
+    dayBookings(t).forEach(function(b){ if(b.type==='mabar' && b.capacity && b.end>nowHour()) mabarOpen+=Math.max(0,b.capacity-(b.players||[]).length); });
+    var nd=pd(t);
+    return '<section class="hero"><svg class="lines" viewBox="0 0 220 140" aria-hidden="true"><rect x="10" y="10" width="200" height="120" rx="3"/><rect class="glass" x="10" y="10" width="200" height="120" rx="3" stroke-dasharray="40 160 40 400"/><line x1="110" y1="10" x2="110" y2="130"/><line x1="40" y1="10" x2="40" y2="130"/><line x1="180" y1="10" x2="180" y2="130"/><line x1="40" y1="70" x2="180" y2="70"/><circle cx="148" cy="44" r="6"/></svg>'+
+      '<div class="hero-top"><div><div class="eyebrow">'+esc(HARI[nd.getDay()]+', '+nd.getDate()+' '+BULAN[nd.getMonth()]+' '+nd.getFullYear())+'</div>'+
+      '<h1>'+esc(S.title||'Jadwal Padel')+'</h1><div class="hours-tag"><span class="dot"></span><span>Buka <b>'+hh(S.open)+' – '+hh(S.close)+'</b></span><span>'+esc(S.sites.map(function(x){return x.name+' ('+x.courts.length+' lap.)';}).join(' · '))+'</span></div></div>'+
+      (isAdmin?'<div class="hero-actions"><button class="hbtn ball" data-act="new">+ Tambah jadwal</button><button class="hbtn" data-act="settings">Pengaturan</button></div>':'')+'</div>'+
+      '<div class="hero-stats">'+S.sites.map(function(x){return '<div class="stat"><b class="free">'+freeHours(t,x.courts)+'</b><span>kosong hari ini<br>'+esc(x.name)+'</span></div>';}).join('')+
+      (mabarOpen?'<div class="stat"><b>'+mabarOpen+'</b><span>kursi mabar kosong</span></div>':'')+'</div></section>';
+  }
+
+  function datesHTML(){
+    return '<nav class="dates" aria-label="Pilih tanggal">'+days().map(function(d){
+      var dt=pd(d), f=freeHours(d,site().courts);
+      return '<button class="date'+(d===sel?' on':'')+'" data-act="day" data-d="'+d+'" aria-pressed="'+(d===sel)+'"><span class="dw">'+(d===today()?'Hari ini':HR[dt.getDay()])+'</span><span class="dn">'+dt.getDate()+'</span><span class="dm">'+BULAN[dt.getMonth()].slice(0,3)+'</span><span class="df'+(f?'':' none')+'">'+(f?f+' kosong':'penuh')+'</span></button>';
+    }).join('')+'</nav>';
+  }
+
+  function boardHTML(){
+    var CS=site().courts, bs=dayBookings(sel), nc=CS.length, isT=sel===today(), F=(isT&&!showPast)?Math.min(Math.max(S.open,nowHour()),S.close-1):S.open, rows=S.close-F, hid=isT?Math.max(0,F-S.open):0;
+    var h='<div class="sites" role="tablist">'+S.sites.map(function(x){return '<button role="tab" class="site'+(x.id===site().id?' on':'')+'" data-act="site" data-s="'+esc(x.id)+'" aria-selected="'+(x.id===site().id)+'"><b>'+esc(x.name)+'</b><span>'+x.courts.length+' lapangan · '+freeHours(sel,x.courts)+' slot kosong</span></button>';}).join('')+'</div>';
+    if(isAdmin) h+='<div class="modebar"><span>Tampilan jadwal</span><div class="pseg mode" role="group" aria-label="Tampilan jadwal"><button type="button" class="'+(!showPay?'on ':'')+'m-pub" data-act="mode" data-v="pub">Umum</button><button type="button" class="'+(showPay?'on ':'')+'m-pay" data-act="mode" data-v="pay">Dengan status bayar</button></div><small>'+(showPay?'Label bayar hanya terlihat oleh kamu.':'Sama seperti yang dilihat pengunjung.')+'</small></div>';
+    h+='<div class="board-head"><h2>'+esc(fmtDay(sel))+'</h2><div class="legend"><span><i class="lf"></i>Kosong</span><span><i class="lb"></i>Booking</span><span><i class="lm"></i>Main bareng</span><span><i class="lc"></i>Tutup</span></div></div>'+((hid||showPast)&&isT&&nowHour()>S.open?'<button class="past-tog" data-act="past">'+(showPast?'Sembunyikan jam yang sudah lewat':'Tampilkan '+hid+' jam yang sudah lewat')+'</button>':'');
+    h+='<div class="board-wrap"><div class="board" style="grid-template-columns:52px repeat('+nc+',minmax(130px,1fr));grid-template-rows:auto repeat('+rows+',minmax(52px,auto))">';
+    h+='<div class="court-h" style="grid-row:1;grid-column:1"></div>';
+    CS.forEach(function(c,i){h+='<div class="court-h" style="grid-row:1;grid-column:'+(i+2)+'">'+esc(c.name)+'</div>';});
+    var isToday=sel===today(), nh=nowHour();
+    for(var hr=F;hr<S.close;hr++) h+='<div class="hr'+(isToday&&hr===nh?' now':'')+'" style="grid-row:'+(hr-F+2)+';grid-column:1">'+hh(hr)+'</div>';
+    CS.forEach(function(c,i){
+      var col=i+2, covered={};
+      bs.filter(function(b){return b.court===c.id;}).sort(function(a,b){return a.start-b.start;}).forEach(function(b){
+        var s=Math.max(b.start,F), e=Math.min(b.end,S.close); if(e<=s) return;
+        for(var k=s;k<e;k++) covered[k]=1;
+        var cap=+b.capacity||0, n=(b.players||[]).length, sub='';
+        if(b.type==='mabar' && cap){ sub=(b.host||b.price?'<span class="s">'+[b.host?'oleh '+esc(b.host):'',b.price?esc(b.price):''].filter(Boolean).join(' · ')+'</span>':'')+'<span class="s">'+n+'/'+cap+' pemain'+(cap>n?' · '+(cap-n)+' tempat lagi':' · penuh')+'</span><span class="pips">'; for(var p=0;p<cap&&p<8;p++) sub+='<span class="pip'+(p<n?'':' o')+'"></span>'; sub+='</span>'; }
+        else sub='<span class="s">'+hh(b.start)+' – '+hh(b.end)+'</span>';
+        h+='<button class="cell blk '+b.type+(b.example?' ex':'')+'" data-act="open" data-id="'+esc(b.id)+'" style="grid-row:'+(s-F+2)+' / span '+(e-s)+';grid-column:'+col+'"><span class="k">'+TYPE[b.type]+(b.example?' · contoh':'')+'</span><span class="n">'+esc(b.label||TYPE[b.type])+'</span>'+sub+(b.type!=='closed'?payBadge(b.id):'')+'</button>';
+      });
+      for(var hr2=F;hr2<S.close;hr2++){
+        if(covered[hr2]) continue;
+        var pos='grid-row:'+(hr2-F+2)+';grid-column:'+col;
+        if(isPastHour(sel,hr2)) h+='<div class="cell past" style="'+pos+'">Lewat</div>';
+        else h+='<button class="cell free" data-act="free" data-c="'+c.id+'" data-h="'+hr2+'" style="'+pos+'"><span class="t">Kosong</span><span class="s">'+hh(hr2)+' – '+hh(hr2+1)+'</span></button>';
+      }
+    });
+    h+='</div></div>';
+    return h;
+  }
+
+
+  /* ---- Riwayat & pembayaran (khusus admin, status bayar disimpan privat) ---- */
+  var view='board', showPay=(_pp!=='0'), db=null, PAY={}, payReady=false, payBusy={}, openP={}, hq='', hf='all', pendingRender=false;
+  var PAYL={unpaid:'Belum bayar',paid:'Lunas',free:'Gratis (promo)'};
+  function payOf(id){return PAY[id]||'unpaid';}
+  function custKey(n){return String(n||'').trim().toLowerCase().replace(/\s+/g,' ');}
+  function custName(b){return b.type==='mabar'?(b.host||b.label):b.label;}
+  function promoEvery(){return +S.promoEvery||10;}
+  function promoFree(){return +S.promoFree||1;}
+  function customers(){
+    var map={};
+    S.bookings.forEach(function(b){
+      if(b.type==='closed'||b.example) return;
+      var nm=custName(b), k=custKey(nm); if(!k) return;
+      var c=map[k]||(map[k]={key:k,name:nm.trim(),list:[],hours:0,count:0,unpaid:0,usedFree:0,last:''});
+      var hrs=Math.max(0,b.end-b.start), st=payOf(b.id);
+      c.list.push(b); c.hours+=hrs;
+      if(st==='free') c.usedFree+=hrs; else c.count+=hrs;
+      if(st==='unpaid') c.unpaid+=hrs;
+      if((b.date+pad(b.start))>c.last){c.last=b.date+pad(b.start);c.name=nm.trim();}
+    });
+    return Object.keys(map).map(function(k){var c=map[k];
+      c.earned=Math.floor(c.count/promoEvery())*promoFree(); c.avail=Math.max(0,c.earned-c.usedFree); c.prog=c.count%promoEvery();
+      c.list.sort(function(a,b){return (b.date+pad(b.start)).localeCompare(a.date+pad(a.start));}); return c;})
+      .sort(function(a,b){return b.hours-a.hours||a.name.localeCompare(b.name);});
+  }
+  function payBadge(id){if(!isAdmin||!payReady||!showPay) return '';var st=payOf(id);return '<span class="pb pb-'+st+'">'+(st==='paid'?'Lunas':st==='free'?'Gratis':'Belum bayar')+'</span>';}
+  function paySeg(id){var st=payOf(id);return '<div class="pseg" role="group" aria-label="Status bayar">'+['unpaid','paid','free'].map(function(v){return '<button type="button" class="'+(st===v?'on ':'')+'p-'+v+'" data-act="pay" data-id="'+esc(id)+'" data-v="'+v+'"'+(payBusy[id]?' disabled':'')+'>'+(v==='unpaid'?'Belum':v==='paid'?'Lunas':'Gratis')+'</button>';}).join('')+'</div>';}
+  function histListHTML(){
+    var cs=customers(), q=custKey(hq);
+    var list=cs.filter(function(c){
+      if(q && c.key.indexOf(q)<0) return false;
+      if(hf==='unpaid') return c.unpaid>0;
+      if(hf==='free') return c.avail>0;
+      return true;});
+    if(!cs.length) return '<div class="hempty"><b>Belum ada riwayat</b>Setiap booking dan main bareng yang kamu tambahkan akan tercatat di sini, dikelompokkan per nama.</div>';
+    if(!list.length) return '<div class="hempty">Tidak ada yang cocok dengan pencarian atau filter ini.</div>';
+    return list.map(function(c){
+      var pct=Math.round(c.prog/promoEvery()*100), toGo=promoEvery()-c.prog;
+      var rows=c.list.map(function(b){var hrs=b.end-b.start;return '<li class="hrow"><div class="hd"><b>'+esc(fmtDay(b.date))+'</b><span>'+esc(courtName(b.court))+' · '+hh(b.start)+'–'+hh(b.end)+(b.type==='mabar'?' · main bareng':'')+'</span></div><div class="hh">'+hrs+' jam</div>'+paySeg(b.id)+'</li>';}).join('');
+      return '<details class="cust" data-k="'+esc(c.key)+'"'+(openP[c.key]?' open':'')+'><summary><div class="cn"><b>'+esc(c.name)+'</b><span>'+c.list.length+' kali booking'+(c.unpaid?' · <em class="due">'+c.unpaid+' jam belum bayar</em>':' · semua lunas')+'</span></div>'+
+        '<div class="ct"><b>'+c.hours+'</b><span>jam</span></div>'+
+        '<div class="promo"><div class="bar"><i style="width:'+pct+'%"></i></div><span>'+(c.avail?'<em class="gift">'+c.avail+' jam gratis siap dipakai</em> · ':'')+c.prog+'/'+promoEvery()+' jam · '+toGo+' jam lagi dapat '+promoFree()+' jam gratis</span></div></summary>'+
+        '<ul class="hrows">'+rows+'</ul>'+(c.usedFree?'<p class="hnote">Sudah memakai '+c.usedFree+' jam gratis. Jam gratis tidak dihitung untuk promo berikutnya.</p>':'')+'</details>';
+    }).join('');
+  }
+  function histHTML(){
+    var cs=customers(), tot=0, due=0, gift=0;
+    cs.forEach(function(c){tot+=c.hours;due+=c.unpaid;gift+=c.avail;});
+    return '<section class="hist"><div class="hsum"><div><b>'+cs.length+'</b><span>pelanggan</span></div><div><b>'+tot+'</b><span>total jam</span></div><div class="'+(due?'due':'')+'"><b>'+due+'</b><span>jam belum bayar</span></div><div><b>'+gift+'</b><span>jam gratis siap dipakai</span></div></div>'+
+      '<p class="hrule">Promo: setiap <b>'+promoEvery()+' jam</b> main dapat <b>'+promoFree()+' jam gratis</b>. Tandai booking sebagai <b>Gratis</b> saat pelanggan memakai jam gratisnya.</p>'+
+      (payReady?'':'<p class="hrule warn">Status pembayaran sedang dimuat…</p>')+
+      '<div class="htools"><input id="h-q" type="search" placeholder="Cari nama…" value="'+esc(hq)+'" aria-label="Cari nama"><div class="chips">'+[['all','Semua'],['unpaid','Belum bayar'],['free','Punya jam gratis']].map(function(f){return '<button class="chip2'+(hf===f[0]?' on':'')+'" data-act="hf" data-v="'+f[0]+'">'+f[1]+'</button>';}).join('')+'</div></div>'+
+      '<div id="h-list" class="hlist">'+histListHTML()+'</div></section>';
+  }
+  function setPay(id,v){
+    if(!db||payBusy[id]) return;
+    var prev=PAY[id]; PAY[id]=v; payBusy[id]=1; render();
+    db.collection('payments').doc(id).set({status:v,at:new Date().toISOString()}).then(function(){delete payBusy[id];render();})
+    .catch(function(e){delete payBusy[id]; if(prev===undefined) delete PAY[id]; else PAY[id]=prev; toast('Status bayar gagal disimpan ('+((e&&e.code)||'error')+'). Coba lagi.'); render();});
+  }
+
+  function courtName(id){var c=allCourts().filter(function(x){return x.id===id;})[0];return c?c.siteName+' · '+c.name:'';}
+
+  function hourOpts(from,to,v){var o='';for(var i=from;i<=to;i++)o+='<option value="'+i+'"'+(i===v?' selected':'')+'>'+hh(i)+'</option>';return o;}
+
+  function sheetHTML(){
+    if(!sheet) return '';
+    var x=sheet.data, h='';
+    if(sheet.kind==='free'){
+      var line='Halo, saya mau booking padel '+(S.title||'')+' '+courtName(x.court)+', '+fmtDay(x.date)+' jam '+hh(x.h)+' – '+hh(x.h+1)+'. Apakah masih kosong?';
+      h='<div><h3>Slot kosong</h3><div class="when">'+esc(courtName(x.court))+' · '+esc(fmtDay(x.date))+' · '+hh(x.h)+' – '+hh(x.h+1)+'</div></div>'+
+        (S.contact?'<div><label>Hubungi penyelenggara untuk booking</label></div><div class="contact"><code>'+esc(S.contact)+'</code><button class="btn" data-act="copy" data-t="'+esc(S.contact)+'">Salin</button></div>':'<p class="when">Hubungi penyelenggara untuk booking slot ini.</p>')+
+        '<label>Contoh pesan</label><div class="msg">'+esc(line)+'</div><div class="btns"><button class="btn" data-act="copy" data-t="'+esc(line)+'">Salin pesan</button><button class="btn primary" data-act="close">Tutup</button></div>';
+    } else if(sheet.kind==='view'){
+      var cap=+x.capacity||0, n=(x.players||[]).length, pl='';
+      (x.players||[]).forEach(function(p){pl+='<span class="pl">'+esc(p)+'</span>';});
+      for(var i=n;i<cap;i++) pl+='<span class="pl o">Tempat kosong</span>';
+      h='<div><div class="eyebrow" style="color:var(--muted)">'+TYPE[x.type]+'</div><h3>'+esc(x.label||TYPE[x.type])+'</h3><div class="when">'+esc(courtName(x.court))+' · '+esc(fmtDay(x.date))+' · '+hh(x.start)+' – '+hh(x.end)+'</div></div>'+
+        (x.type==='mabar'?'<div class="facts">'+(x.host?'<div><span>Dibuka oleh</span><b>'+esc(x.host)+'</b></div>':'')+(x.price?'<div><span>Biaya</span><b>'+esc(x.price)+'</b></div>':'')+(cap?'<div><span>Sisa tempat</span><b>'+(cap>n?(cap-n)+' dari '+cap:'Penuh')+'</b></div>':'')+'</div>':'')+
+        (pl?'<div class="players">'+pl+'</div>':'')+(x.note?'<p style="margin:0">'+esc(x.note)+'</p>':'')+
+        (x.type==='mabar'&&cap>n&&(x.hostContact||S.contact)?(function(){var ct=x.hostContact||S.contact, msg='Halo'+(x.host&&x.hostContact?' '+x.host:'')+', saya mau ikut '+(x.label||'main bareng')+' di '+courtName(x.court)+', '+fmtDay(x.date)+' jam '+hh(x.start)+' – '+hh(x.end)+'. Masih ada tempat?';return '<label>Mau ikut? Hubungi '+(x.hostContact&&x.host?esc(x.host):'penyelenggara')+'</label><div class="contact"><code>'+esc(ct)+'</code><button class="btn" data-act="copy" data-t="'+esc(ct)+'">Salin kontak</button></div><div class="msg">'+esc(msg)+'</div><div class="btns"><button class="btn" data-act="copy" data-t="'+esc(msg)+'">Salin pesan</button></div>';})():'')+
+        '<div class="btns"><button class="btn primary" data-act="close">Tutup</button></div>';
+    } else if(sheet.kind==='edit'){
+      var courts=S.sites.map(function(st){return '<optgroup label="'+esc(st.name)+'">'+st.courts.map(function(c){return '<option value="'+esc(c.id)+'"'+(c.id===x.court?' selected':'')+'>'+esc(st.name+' · '+c.name)+'</option>';}).join('')+'</optgroup>';}).join('');
+      h='<div><h3>'+(x.id?'Ubah jadwal':'Jadwal baru')+'</h3></div>'+
+        '<div class="seg" role="group" aria-label="Jenis">'+['booked','mabar','closed'].map(function(t){return '<button type="button" data-act="type" data-v="'+t+'" class="'+(x.type===t?'on':'')+'">'+TYPE[t]+'</button>';}).join('')+'</div>'+
+        '<form id="ed" class="grid" novalidate>'+
+        '<label class="wide">'+(x.type==='booked'?'Nama pemesan':x.type==='mabar'?'Nama sesi':'Keterangan')+'<input id="f-label" maxlength="60" value="'+esc(x.label)+'" placeholder="'+(x.type==='booked'?'Andi':x.type==='mabar'?'Mabar malam':'Perawatan lapangan')+'"></label>'+
+        '<label>Tanggal<input id="f-date" type="date" value="'+esc(x.date)+'"></label>'+
+        '<label>Lapangan<select id="f-court">'+courts+'</select></label>'+
+        '<label>Mulai<select id="f-start">'+hourOpts(S.open,S.close-1,x.start)+'</select></label>'+
+        '<label>Selesai<select id="f-end">'+hourOpts(S.open+1,S.close,x.end)+'</select></label>'+
+        (x.type==='mabar'?'<label>Dibuka oleh<input id="f-host" maxlength="40" value="'+esc(x.host)+'" placeholder="Ikhsan"></label><label>Kontak dia (opsional)<input id="f-hc" maxlength="40" value="'+esc(x.hostContact)+'" placeholder="WA 0812-xxxx"><span class="hint">Kosong = pakai kontak umum</span></label><label class="wide">Biaya per orang<input id="f-price" maxlength="40" value="'+esc(x.price)+'" placeholder="Rp50.000/orang"></label><label>Kuota pemain<input id="f-cap" type="number" min="1" max="16" value="'+esc(x.capacity||4)+'"><span class="hint">Total termasuk yang sudah ikut</span></label><label>Pemain<input id="f-players" value="'+esc((x.players||[]).join(', '))+'" placeholder="Sky, Andi"><span class="hint">Pisahkan dengan koma</span></label>':'')+
+        (x.type!=='closed'?'<label class="wide">Catatan<textarea id="f-note" maxlength="300" placeholder="Biaya, bawa raket, dll.">'+esc(x.note)+'</textarea></label>':'')+
+        '</form>'+(x.id&&x.type!=='closed'&&isAdmin&&db?'<label>Pembayaran (tersimpan langsung, hanya kamu yang lihat)</label>'+paySeg(x.id):'')+(err?'<p class="err">'+esc(err)+'</p>':'')+
+        '<div class="btns">'+(x.id?(confirmDel?'<button class="btn danger" data-act="del-yes">Ya, hapus</button><button class="btn" data-act="del-no">Batal hapus</button>':'<button class="btn danger" data-act="del">Hapus</button>'):'')+
+        '<button class="btn" data-act="close">Batal</button><button class="btn primary" data-act="save"'+(saving?' disabled':'')+'>'+(saving?'Menyimpan…':'Simpan')+'</button></div>';
+    } else if(sheet.kind==='settings'){
+      h='<div><h3>Pengaturan</h3><div class="when">Berlaku untuk semua orang yang membuka halaman ini.</div></div><form id="st" class="grid" novalidate>'+
+        '<label class="wide">Judul<input id="s-title" maxlength="40" value="'+esc(x.title)+'"></label>'+
+        '<label>Jam buka<select id="s-open">'+hourOpts(0,23,x.open)+'</select></label>'+
+        '<label>Jam tutup<select id="s-close">'+hourOpts(1,24,x.close)+'</select></label>'+
+        '<label class="wide">Tempat & lapangan<textarea id="s-courts" rows="3">'+esc(x.courts)+'</textarea><span class="hint">Satu tempat per baris. Contoh: Jo Bawah: Lapangan 1, Lapangan 2</span></label>'+
+        '<label>Promo: setiap … jam<input id="s-pe" type="number" min="1" max="100" value="'+esc(x.promoEvery)+'"></label><label>… dapat jam gratis<input id="s-pf" type="number" min="0" max="20" value="'+esc(x.promoFree)+'"></label>'+
+        '<label class="wide">Kontak untuk booking (opsional)<input id="s-contact" maxlength="60" value="'+esc(x.contact)+'" placeholder="WA 0812-xxxx-xxxx"><span class="hint">Ditampilkan saat orang menekan slot kosong</span></label>'+
+        '</form>'+(err?'<p class="err">'+esc(err)+'</p>':'')+
+        '<div class="btns"><button class="btn" data-act="close">Batal</button><button class="btn primary" data-act="save-settings"'+(saving?' disabled':'')+'>'+(saving?'Menyimpan…':'Simpan')+'</button></div>';
+    }
+    return '<div class="scrim" data-act="scrim"><div class="sheet" role="dialog" aria-modal="true">'+h+'</div></div>';
+  }
+
+  function render(){
+    var hasEx=S.bookings.some(function(b){return b.example;});
+    var tabs=isAdmin?'<div class="vtabs" role="tablist"><button role="tab" class="'+(view==='board'?'on':'')+'" data-act="view" data-v="board">Jadwal</button><button role="tab" class="'+(view==='hist'?'on':'')+'" data-act="view" data-v="hist">Riwayat & pembayaran</button></div>':'';
+    if(isAdmin&&view==='hist'){app.innerHTML=heroHTML()+tabs+histHTML()+sheetHTML();return;}
+    app.innerHTML=heroHTML()+tabs+datesHTML()+'<section>'+boardHTML()+'</section>'+
+      (isAdmin?'<p class="admin-note"><b>Mode admin.</b> Tekan slot kosong untuk menambah jadwal, atau tekan jadwal untuk mengubahnya. Orang lain hanya bisa melihat.</p>':'')+
+      (isAdmin&&hasEx?'<p class="ex-note">Jadwal bergaris merah adalah contoh. Hapus lalu ganti dengan jadwal asli.</p>':'')+sheetHTML();
+  }
+
+  function toast(m){var t=document.createElement('div');t.className='toast';t.setAttribute('role','status');t.textContent=m;document.body.appendChild(t);setTimeout(function(){t.remove();},2600);}
+
+  function buildDoc(){
+    var json=JSON.stringify(S).replace(/</g,'\\u003c');
+    var hs=(document.head.querySelector('style')||{textContent:''}).textContent;
+    var parts=[document.body.querySelector('title'),document.body.querySelector('link[rel=stylesheet]'),document.body.querySelector('style')].filter(Boolean).map(function(e){return e.outerHTML;}).join('');
+    return '<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>'+hs+'</style></head><body>'+parts+
+      '<div id="app"></div>\n<script type="application/json" id="state">'+json+'<\/script>\n'+document.getElementById('app-script').outerHTML+'</body></html>';
+  }
+
+  function save(next,okMsg){
+    if(!art){toast('Tampilan ini hanya bisa melihat jadwal.');return;}
+    var prev=S; S=next; saving=true; render();
+    art.publish(buildDoc()).then(function(){saving=false;sheet=null;confirmDel=false;err='';toast(okMsg||'Tersimpan');render();})
+    .catch(function(e){
+      saving=false; S=prev; var c=e&&e.code;
+      if(c==='conflict'){toast('Jadwal baru saja diubah, memuat versi terbaru…');return;}
+      if(c==='not_writer'||c==='not_granted'){isAdmin=false;sheet=null;toast('Tampilan ini hanya bisa melihat jadwal.');render();return;}
+      err=c==='rate_limited'?'Terlalu cepat. Tunggu sebentar lalu simpan lagi.':'Gagal menyimpan ('+(c||'error')+'). Coba lagi.';
+      render();
+    });
+  }
+  function clone(){return JSON.parse(JSON.stringify(S));}
+  function nid(p){return p+Date.now().toString(36)+Math.random().toString(36).slice(2,5);}
+  function val(id){var e=document.getElementById(id);return e?e.value.trim():'';}
+  function readEditor(){
+    var x=sheet.data;
+    if(!document.getElementById('f-date')) return x;
+    x.label=val('f-label'); x.date=val('f-date'); x.court=val('f-court'); x.start=+val('f-start'); x.end=+val('f-end');
+    if(document.getElementById('f-cap')){x.capacity=Math.max(1,Math.min(16,parseInt(val('f-cap'),10)||4)); x.players=val('f-players').split(',').map(function(s){return s.trim();}).filter(Boolean).slice(0,16);}
+    if(document.getElementById('f-note')) x.note=val('f-note');
+    if(document.getElementById('f-host')){x.host=val('f-host');x.hostContact=val('f-hc');x.price=val('f-price');}
+    return x;
+  }
+
+  app.addEventListener('click',function(e){
+    var b=e.target.closest('[data-act]'); if(!b) return;
+    var a=b.getAttribute('data-act');
+    if(a==='scrim'){ if(e.target===b && !saving){sheet=null;err='';confirmDel=false;render();} return; }
+    if(saving) return;
+    if(a==='past'){showPast=!showPast;render();}
+    else if(a==='view'){view=b.getAttribute('data-v');render();}
+    else if(a==='mode'){showPay=b.getAttribute('data-v')==='pay';try{sessionStorage.setItem('padel-pay',showPay?'1':'0');}catch(_){}render();}
+    else if(a==='hf'){hf=b.getAttribute('data-v');render();}
+    else if(a==='pay'){setPay(b.getAttribute('data-id'),b.getAttribute('data-v'));}
+    else if(a==='site'){selSite=b.getAttribute('data-s');try{sessionStorage.setItem('padel-site',selSite);}catch(_){}render();}
+    else if(a==='day'){sel=b.getAttribute('data-d');try{sessionStorage.setItem('padel-sel',sel);}catch(_){}render();}
+    else if(a==='close'){sheet=null;err='';confirmDel=false;render();}
+    else if(a==='free'){
+      var c=b.getAttribute('data-c'), h=+b.getAttribute('data-h');
+      if(isAdmin) sheet={kind:'edit',data:{type:'booked',label:'',date:sel,court:c,start:h,end:Math.min(h+1,S.close),players:[],capacity:4,note:''}};
+      else sheet={kind:'free',data:{court:c,date:sel,h:h}};
+      err='';render();
+    }
+    else if(a==='open'){
+      var bk=S.bookings.filter(function(x){return x.id===b.getAttribute('data-id');})[0]; if(!bk) return;
+      sheet={kind:isAdmin?'edit':'view',data:JSON.parse(JSON.stringify(bk))}; err='';confirmDel=false;render();
+    }
+    else if(a==='new'){sheet={kind:'edit',data:{type:'booked',label:'',date:sel,court:site().courts[0].id,start:Math.max(S.open,Math.min(S.close-1,19)),end:Math.min(S.close,Math.max(S.open+1,21)),players:[],capacity:4,note:''}};err='';render();}
+    else if(a==='settings'){sheet={kind:'settings',data:{title:S.title,open:S.open,close:S.close,courts:S.sites.map(function(st){return st.name+': '+st.courts.map(function(c){return c.name;}).join(', ');}).join('\n'),contact:S.contact||'',promoEvery:promoEvery(),promoFree:promoFree()}};err='';render();}
+    else if(a==='type'){readEditor();sheet.data.type=b.getAttribute('data-v');render();}
+    else if(a==='copy'){
+      var t=b.getAttribute('data-t');
+      try{navigator.clipboard.writeText(t).then(function(){toast('Disalin');},function(){toast('Tidak bisa menyalin otomatis. Tekan lama teksnya untuk menyalin.');});}catch(_){toast('Tekan lama teksnya untuk menyalin.');}
+    }
+    else if(a==='del'){confirmDel=true;readEditor();render();}
+    else if(a==='del-no'){confirmDel=false;readEditor();render();}
+    else if(a==='del-yes'){var id=sheet.data.id,n=clone();n.bookings=n.bookings.filter(function(x){return x.id!==id;});save(n,'Jadwal dihapus');}
+    else if(a==='save'){
+      var x=readEditor();
+      if(!x.date){err='Pilih tanggal dulu.';render();return;}
+      if(x.end<=x.start){err='Jam selesai harus setelah jam mulai.';render();return;}
+      var clash=S.bookings.filter(function(o){return o.id!==x.id && o.date===x.date && o.court===x.court && x.start<o.end && o.start<x.end;})[0];
+      if(clash){err='Bentrok dengan "'+(clash.label||TYPE[clash.type])+'" ('+hh(clash.start)+' – '+hh(clash.end)+') di lapangan yang sama.';render();return;}
+      var rec={id:x.id||nid('b'),date:x.date,court:x.court,start:x.start,end:x.end,type:x.type,label:x.label,
+        players:x.type==='mabar'?(x.players||[]):[],capacity:x.type==='mabar'?(x.capacity||4):0,note:x.type==='closed'?'':(x.note||''),example:false};
+      if(x.type==='mabar'){rec.host=x.host||'';rec.hostContact=x.hostContact||'';rec.price=x.price||'';}
+      var n2=clone(),i=-1; n2.bookings.forEach(function(o,k){if(o.id===rec.id)i=k;});
+      if(i>=0)n2.bookings[i]=rec; else n2.bookings.push(rec);
+      sel=rec.date; S.sites.forEach(function(st){if(st.courts.some(function(c){return c.id===rec.court;}))selSite=st.id;}); save(n2,'Jadwal disimpan');
+    }
+    else if(a==='save-settings'){
+      var op=+val('s-open'), cl=+val('s-close');
+      var names=val('s-courts').split('\n').map(function(line){var i=line.indexOf(':');if(i<0)return null;var nm=line.slice(0,i).trim();var cs=line.slice(i+1).split(',').map(function(z){return z.trim();}).filter(Boolean).slice(0,8);return nm&&cs.length?{name:nm,courts:cs}:null;}).filter(Boolean).slice(0,6);
+      if(cl<=op){err='Jam tutup harus setelah jam buka.';sheet.data={title:val('s-title'),open:op,close:cl,courts:val('s-courts'),contact:val('s-contact')};render();return;}
+      if(!names.length){err='Isi minimal satu tempat dengan format "Nama tempat: Lapangan 1, Lapangan 2".';sheet.data={title:val('s-title'),open:op,close:cl,courts:val('s-courts'),contact:val('s-contact')};render();return;}
+      var n3=clone(); n3.title=val('s-title')||'Jadwal Padel'; n3.open=op; n3.close=cl; n3.contact=val('s-contact'); n3.promoEvery=Math.max(1,Math.min(100,parseInt(val('s-pe'),10)||10)); n3.promoFree=Math.max(0,Math.min(20,parseInt(val('s-pf'),10)||0));
+      n3.sites=names.map(function(sn,k){var old=S.sites.filter(function(o){return o.name===sn.name;})[0]||S.sites[k];return {id:(old&&old.id)||nid('s'),name:sn.name,courts:sn.courts.map(function(cn,j){var oc=old&&(old.courts.filter(function(o){return o.name===cn;})[0]||old.courts[j]);return {id:(oc&&oc.id)||nid('c'),name:cn};})};});
+      if(!n3.sites.some(function(o){return o.id===selSite;})) selSite=n3.sites[0].id;
+      save(n3,'Pengaturan disimpan');
+    }
+  });
+  app.addEventListener('input',function(e){ if(e.target.id==='h-q'){ hq=e.target.value; var l=document.getElementById('h-list'); if(l) l.innerHTML=histListHTML(); } });
+  app.addEventListener('toggle',function(e){ var d=e.target; if(d.classList&&d.classList.contains('cust')){ var k=d.getAttribute('data-k'); if(d.open) openP[k]=1; else delete openP[k]; } },true);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&sheet&&!saving){sheet=null;err='';confirmDel=false;render();}});
+
+  render();
+  setInterval(function(){ if(!sheet) render(); },5*60*1000);
+})();
+</script>
+
+</body>
+</html>
