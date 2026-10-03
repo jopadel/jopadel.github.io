@@ -203,6 +203,23 @@ button{font:inherit;color:inherit}
 .pseg button.on.p-free{background:var(--ball);color:var(--ball-ink)}
 .pseg button[disabled]{opacity:.6;cursor:wait}
 .hnote{margin:0;padding:0 16px 12px;font-size:.78rem;color:var(--muted)}
+.cn .wa{font-size:.78rem;color:var(--fg);font-variant-numeric:tabular-nums}
+.cn .nowa{font-size:.72rem;font-weight:700;color:var(--danger);text-transform:uppercase;letter-spacing:.05em}
+.nowa-note{color:var(--danger)}
+.nowa-note b{color:var(--danger)}
+.mbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:.82rem;color:var(--muted)}
+.btn.small2{padding:7px 12px;font-size:.82rem}
+.mrow{padding:0 16px 10px}
+.linkbox{margin:0 16px 12px;padding:12px;border:1px dashed var(--danger);border-radius:10px;display:flex;flex-direction:column;gap:6px}
+.linkbox label{font-size:.8rem;font-weight:600}
+.linkbox div{display:flex;gap:8px;flex-wrap:wrap}
+.linkbox input{flex:1;min-width:150px;font:400 .95rem var(--body);color:var(--fg);background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:8px 10px}
+.linkbox .hint{font-size:.74rem;color:var(--muted)}
+.cbar{display:flex;align-items:center;justify-content:space-between;gap:10px 14px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.cbar div{display:flex;flex-direction:column;min-width:0}
+.cbar span{font-size:.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.cbar b{font-size:1rem;font-variant-numeric:tabular-nums;user-select:all}
+.wa-btn{background:var(--free);border-color:var(--free);color:var(--surface);text-decoration:none;display:inline-flex;align-items:center}
 .hempty{text-align:center;padding:32px 16px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);font-size:.9rem}
 .hempty b{display:block;font-family:var(--display);font-size:1.4rem;color:var(--fg);text-transform:uppercase}
 @media (max-width:520px){.hsum{grid-template-columns:repeat(2,minmax(0,1fr))}.hrow{grid-template-columns:1fr auto}.hrow .pseg{grid-column:1/-1;justify-self:start}}
@@ -210,7 +227,7 @@ button{font:inherit;color:inherit}
 </head>
 <body>
 <div id="app"></div>
-<script type="application/json" id="state">{"title": "Jo Padel", "open": 7, "close": 24, "contact": "", "bookings": [{"id": "b-yohan", "date": "2026-10-03", "court": "c1", "start": 9, "end": 11, "type": "booked", "label": "Yohan", "players": [], "capacity": 0, "note": "", "example": false}, {"id": "b-vira", "date": "2026-10-03", "court": "c2", "start": 9, "end": 11, "type": "booked", "label": "Vira", "players": [], "capacity": 0, "note": "", "example": false}, {"id": "b-heru", "date": "2026-10-03", "court": "c1", "start": 15, "end": 16, "type": "booked", "label": "Heru", "players": [], "capacity": 0, "note": "", "example": false}, {"id": "b-habib", "date": "2026-10-03", "court": "c1", "start": 16, "end": 17, "type": "booked", "label": "Abd Habib", "players": [], "capacity": 0, "note": "", "example": false}, {"id": "b-bosab", "date": "2026-10-03", "court": "c1", "start": 17, "end": 19, "type": "booked", "label": "Bos AB", "players": [], "capacity": 0, "note": "", "example": false}, {"id": "b-dimas", "date": "2026-10-03", "court": "c1", "start": 19, "end": 21, "type": "booked", "label": "Pak Dimas", "players": [], "capacity": 0, "note": "", "example": false}, {"id": "b-nowsky1", "date": "2026-10-03", "court": "c1", "start": 21, "end": 22, "type": "booked", "label": "Nowsky", "players": [], "capacity": 0, "note": "", "example": false}, {"id": "b-jeremy", "date": "2026-10-03", "court": "c2", "start": 16, "end": 18, "type": "booked", "label": "Jeremy", "players": [], "capacity": 0, "note": "", "example": false}, {"id": "b-nowsky2", "date": "2026-10-03", "court": "c2", "start": 18, "end": 20, "type": "booked", "label": "Nowsky", "players": [], "capacity": 0, "note": "", "example": false}, {"id": "b-roni", "date": "2026-10-03", "court": "c2", "start": 20, "end": 22, "type": "booked", "label": "Roni", "players": [], "capacity": 0, "note": "", "example": false}], "sites": [{"id": "bawah", "name": "Jo Bawah", "courts": [{"id": "c1", "name": "Lapangan 1"}, {"id": "c2", "name": "Lapangan 2"}]}, {"id": "atas", "name": "Jo Atas", "courts": [{"id": "c3", "name": "Lapangan 1"}]}], "promoEvery": 10, "promoFree": 1}</script>
+<script type="application/json" id="state">{"title": "Jo Padel", "open": 7, "close": 24, "contact": "Hendra · +62 882-0200-44266", "bookings": [{"id": "b-yohan", "date": "2026-10-03", "court": "c1", "start": 9, "end": 11, "type": "booked", "label": "Yohan", "players": [], "capacity": 0, "note": "", "example": false}, {"id": "b-vira", "date": "2026-10-03", "court": "c2", "start": 9, "end": 11, "type": "booked", "label": "Vira", "players": [], "capacity": 0, "note": "", "example": false}, {"id": "b-heru", "date": "2026-10-03", "court": "c1", "start": 15, "end": 16, "type": "booked", "label": "Heru", "players": [], "capacity": 0, "note": "", "example": false}, {"id": "b-habib", "date": "2026-10-03", "court": "c1", "start": 16, "end": 17, "type": "booked", "label": "Abd Habib", "players": [], "capacity": 0, "note": "", "example": false}, {"id": "b-bosab", "date": "2026-10-03", "court": "c1", "start": 17, "end": 19, "type": "booked", "label": "Bos AB", "players": [], "capacity": 0, "note": "", "example": false}, {"id": "b-dimas", "date": "2026-10-03", "court": "c1", "start": 19, "end": 21, "type": "booked", "label": "Pak Dimas", "players": [], "capacity": 0, "note": "", "example": false}, {"id": "b-nowsky1", "date": "2026-10-03", "court": "c1", "start": 21, "end": 22, "type": "booked", "label": "Nowsky", "players": [], "capacity": 0, "note": "", "example": false}, {"id": "b-jeremy", "date": "2026-10-03", "court": "c2", "start": 16, "end": 18, "type": "booked", "label": "Jeremy", "players": [], "capacity": 0, "note": "", "example": false}, {"id": "b-nowsky2", "date": "2026-10-03", "court": "c2", "start": 18, "end": 20, "type": "booked", "label": "Nowsky", "players": [], "capacity": 0, "note": "", "example": false}, {"id": "b-roni", "date": "2026-10-03", "court": "c2", "start": 20, "end": 22, "type": "booked", "label": "Roni", "players": [], "capacity": 0, "note": "", "example": false}], "sites": [{"id": "bawah", "name": "Jo Bawah", "courts": [{"id": "c1", "name": "Lapangan 1"}, {"id": "c2", "name": "Lapangan 2"}]}, {"id": "atas", "name": "Jo Atas", "courts": [{"id": "c3", "name": "Lapangan 1"}]}], "promoEvery": 10, "promoFree": 1}</script>
 <script id="app-script">
 (function(){
   var S = JSON.parse(document.getElementById('state').textContent);
@@ -234,6 +251,9 @@ button{font:inherit;color:inherit}
 
   function allCourts(){var o=[];S.sites.forEach(function(st){st.courts.forEach(function(c){o.push({id:c.id,name:c.name,site:st.id,siteName:st.name});});});return o;}
   function site(){return S.sites.filter(function(x){return x.id===selSite;})[0]||S.sites[0];}
+  function waNum(t){var d=String(t||'').replace(/\D/g,''); if(d[0]==='0') d='62'+d.slice(1); return d.length>=10&&d.length<=15?d:'';}
+  function waBtn(contact,msg,label){var n=waNum(contact); return n?'<a class="btn wa-btn" href="https://wa.me/'+n+'?text='+encodeURIComponent(msg)+'" target="_blank" rel="noopener">'+(label||'Chat WhatsApp')+'</a>':'';}
+  function contactBar(){if(!S.contact) return ''; var msg='Halo, saya mau booking lapangan di '+(S.title||'Jo Padel')+'.'; return '<div class="cbar"><div><span>Mau booking?</span><b>'+esc(S.contact)+'</b></div>'+waBtn(S.contact,msg)+'</div>';}
   function courtIds(){return allCourts().map(function(c){return c.id;});}
   function dayBookings(date){var ids=courtIds();return S.bookings.filter(function(b){return b.date===date && ids.indexOf(b.court)>=0;});}
   function nowHour(){return new Date().getHours();}
@@ -303,9 +323,14 @@ button{font:inherit;color:inherit}
 
 
   /* ---- Riwayat & pembayaran (khusus admin, status bayar disimpan privat) ---- */
+  var MEM={}, LINK={}, memReady=false, linkReady=false;
   var view='board', showPay=(_pp!=='0'), db=null, PAY={}, payReady=false, payBusy={}, openP={}, hq='', hf='all', pendingRender=false;
   var PAYL={unpaid:'Belum bayar',paid:'Lunas',free:'Gratis (promo)'};
   function payOf(id){return PAY[id]||'unpaid';}
+  function normWA(v){var d=String(v||'').replace(/\D/g,''); if(!d) return ''; if(d.indexOf('62')===0) d=d; else if(d[0]==='0') d='62'+d.slice(1); else if(d[0]==='8') d='62'+d; return (d.length>=10&&d.length<=15)?d:null;}
+  function fmtWA(d){if(!d) return ''; var l='0'+d.slice(2); return l.slice(0,4)+'-'+l.slice(4,8)+(l.length>8?'-'+l.slice(8):'');}
+  function snapRender(){ if(sheet&&(sheet.kind==='settings'||sheet.kind==='member')){pendingRender=true;return;} if(sheet&&sheet.kind==='edit') readEditor(); render(); }
+  function memberSheet(ph){var m=ph&&MEM[ph]; return {kind:'member',data:{orig:ph||'',name:m?m.name:'',phone:ph?fmtWA(ph):''}};}
   function custKey(n){return String(n||'').trim().toLowerCase().replace(/\s+/g,' ');}
   function custName(b){return b.type==='mabar'?(b.host||b.label):b.label;}
   function promoEvery(){return +S.promoEvery||10;}
@@ -314,14 +339,15 @@ button{font:inherit;color:inherit}
     var map={};
     S.bookings.forEach(function(b){
       if(b.type==='closed'||b.example) return;
-      var nm=custName(b), k=custKey(nm); if(!k) return;
-      var c=map[k]||(map[k]={key:k,name:nm.trim(),list:[],hours:0,count:0,unpaid:0,usedFree:0,last:''});
+      var nm=custName(b), ph=LINK[b.id], k=ph?'p:'+ph:'n:'+custKey(nm); if(!ph&&!custKey(nm)) return;
+      var c=map[k]||(map[k]={key:k,phone:ph||'',name:(ph&&MEM[ph]&&MEM[ph].name)||nm.trim(),list:[],hours:0,count:0,unpaid:0,usedFree:0,last:''});
       var hrs=Math.max(0,b.end-b.start), st=payOf(b.id);
       c.list.push(b); c.hours+=hrs;
       if(st==='free') c.usedFree+=hrs; else c.count+=hrs;
       if(st==='unpaid') c.unpaid+=hrs;
-      if((b.date+pad(b.start))>c.last){c.last=b.date+pad(b.start);c.name=nm.trim();}
+      if((b.date+pad(b.start))>c.last){c.last=b.date+pad(b.start);if(!(ph&&MEM[ph]&&MEM[ph].name))c.name=nm.trim();}
     });
+    Object.keys(MEM).forEach(function(ph){var k='p:'+ph; if(!map[k]) map[k]={key:k,phone:ph,name:MEM[ph].name||fmtWA(ph),list:[],hours:0,count:0,unpaid:0,usedFree:0,last:''};});
     return Object.keys(map).map(function(k){var c=map[k];
       c.earned=Math.floor(c.count/promoEvery())*promoFree(); c.avail=Math.max(0,c.earned-c.usedFree); c.prog=c.count%promoEvery();
       c.list.sort(function(a,b){return (b.date+pad(b.start)).localeCompare(a.date+pad(a.start));}); return c;})
@@ -332,19 +358,21 @@ button{font:inherit;color:inherit}
   function histListHTML(){
     var cs=customers(), q=custKey(hq);
     var list=cs.filter(function(c){
-      if(q && c.key.indexOf(q)<0) return false;
+      if(q && custKey(c.name).indexOf(q)<0 && (c.phone+' '+fmtWA(c.phone)).indexOf(q.replace(/^0/,''))<0) return false;
       if(hf==='unpaid') return c.unpaid>0;
       if(hf==='free') return c.avail>0;
+      if(hf==='nowa') return !c.phone;
       return true;});
-    if(!cs.length) return '<div class="hempty"><b>Belum ada riwayat</b>Setiap booking dan main bareng yang kamu tambahkan akan tercatat di sini, dikelompokkan per nama.</div>';
+    if(!cs.length) return '<div class="hempty"><b>Belum ada riwayat</b>Setiap booking dan main bareng yang kamu tambahkan akan tercatat di sini, dikelompokkan per nomor WA.</div>';
     if(!list.length) return '<div class="hempty">Tidak ada yang cocok dengan pencarian atau filter ini.</div>';
     return list.map(function(c){
       var pct=Math.round(c.prog/promoEvery()*100), toGo=promoEvery()-c.prog;
       var rows=c.list.map(function(b){var hrs=b.end-b.start;return '<li class="hrow"><div class="hd"><b>'+esc(fmtDay(b.date))+'</b><span>'+esc(courtName(b.court))+' · '+hh(b.start)+'–'+hh(b.end)+(b.type==='mabar'?' · main bareng':'')+'</span></div><div class="hh">'+hrs+' jam</div>'+paySeg(b.id)+'</li>';}).join('');
-      return '<details class="cust" data-k="'+esc(c.key)+'"'+(openP[c.key]?' open':'')+'><summary><div class="cn"><b>'+esc(c.name)+'</b><span>'+c.list.length+' kali booking'+(c.unpaid?' · <em class="due">'+c.unpaid+' jam belum bayar</em>':' · semua lunas')+'</span></div>'+
+      return '<details class="cust" data-k="'+esc(c.key)+'"'+(openP[c.key]?' open':'')+'><summary><div class="cn"><b>'+esc(c.name)+'</b>'+(c.phone?'<span class="wa">WA '+esc(fmtWA(c.phone))+'</span>':'<span class="nowa">Belum ada nomor WA</span>')+'<span>'+c.list.length+' kali booking'+(c.unpaid?' · <em class="due">'+c.unpaid+' jam belum bayar</em>':' · semua lunas')+'</span></div>'+
         '<div class="ct"><b>'+c.hours+'</b><span>jam</span></div>'+
         '<div class="promo"><div class="bar"><i style="width:'+pct+'%"></i></div><span>'+(c.avail?'<em class="gift">'+c.avail+' jam gratis siap dipakai</em> · ':'')+c.prog+'/'+promoEvery()+' jam · '+toGo+' jam lagi dapat '+promoFree()+' jam gratis</span></div></summary>'+
-        '<ul class="hrows">'+rows+'</ul>'+(c.usedFree?'<p class="hnote">Sudah memakai '+c.usedFree+' jam gratis. Jam gratis tidak dihitung untuk promo berikutnya.</p>':'')+'</details>';
+        (c.phone?'<div class="mrow"><button class="btn small2" data-act="mem-edit" data-p="'+esc(c.phone)+'">Ubah nama / nomor</button></div>':'<div class="linkbox"><label for="lk-'+esc(c.key)+'">Hubungkan ke nomor WA supaya jamnya tercatat per orang</label><div><input id="lk-'+esc(c.key)+'" type="tel" inputmode="tel" placeholder="0812-xxxx-xxxx" list="memlist"><button class="btn small2 primary" data-act="link-group" data-k="'+esc(c.key)+'">Simpan</button></div><span class="hint">Kalau nomornya sudah dipakai member lain, booking ini digabung ke member itu.</span></div>')+
+        (c.list.length?'<ul class="hrows">'+rows+'</ul>':'<p class="hnote">Belum ada booking.</p>')+(c.usedFree?'<p class="hnote">Sudah memakai '+c.usedFree+' jam gratis. Jam gratis tidak dihitung untuk promo berikutnya.</p>':'')+'</details>';
     }).join('');
   }
   function histHTML(){
@@ -352,9 +380,39 @@ button{font:inherit;color:inherit}
     cs.forEach(function(c){tot+=c.hours;due+=c.unpaid;gift+=c.avail;});
     return '<section class="hist"><div class="hsum"><div><b>'+cs.length+'</b><span>pelanggan</span></div><div><b>'+tot+'</b><span>total jam</span></div><div class="'+(due?'due':'')+'"><b>'+due+'</b><span>jam belum bayar</span></div><div><b>'+gift+'</b><span>jam gratis siap dipakai</span></div></div>'+
       '<p class="hrule">Promo: setiap <b>'+promoEvery()+' jam</b> main dapat <b>'+promoFree()+' jam gratis</b>. Tandai booking sebagai <b>Gratis</b> saat pelanggan memakai jam gratisnya.</p>'+
-      (payReady?'':'<p class="hrule warn">Status pembayaran sedang dimuat…</p>')+
-      '<div class="htools"><input id="h-q" type="search" placeholder="Cari nama…" value="'+esc(hq)+'" aria-label="Cari nama"><div class="chips">'+[['all','Semua'],['unpaid','Belum bayar'],['free','Punya jam gratis']].map(function(f){return '<button class="chip2'+(hf===f[0]?' on':'')+'" data-act="hf" data-v="'+f[0]+'">'+f[1]+'</button>';}).join('')+'</div></div>'+
+      (payReady&&memReady&&linkReady?'':'<p class="hrule">Data member & pembayaran sedang dimuat…</p>')+
+      (function(){var nw=cs.filter(function(c){return !c.phone;}).length;return nw?'<p class="hrule nowa-note"><b>'+nw+' nama belum punya nomor WA.</b> Buka kartunya lalu isi nomornya, supaya orang yang sama tidak terhitung dua kali.</p>':'';})()+
+      '<div class="mbar"><button class="btn small2 primary" data-act="mem-new">+ Tambah member</button><span>'+Object.keys(MEM).length+' member terdaftar</span></div>'+memDatalist()+
+      '<div class="htools"><input id="h-q" type="search" placeholder="Cari nama atau nomor WA…" value="'+esc(hq)+'" aria-label="Cari nama"><div class="chips">'+[['all','Semua'],['unpaid','Belum bayar'],['free','Punya jam gratis'],['nowa','Belum ada WA']].map(function(f){return '<button class="chip2'+(hf===f[0]?' on':'')+'" data-act="hf" data-v="'+f[0]+'">'+f[1]+'</button>';}).join('')+'</div></div>'+
       '<div id="h-list" class="hlist">'+histListHTML()+'</div></section>';
+  }
+  function memDatalist(){return '<datalist id="memlist">'+Object.keys(MEM).sort(function(a,b){return (MEM[a].name||'').localeCompare(MEM[b].name||'');}).map(function(ph){return '<option value="'+esc(fmtWA(ph))+'" label="'+esc(MEM[ph].name||'')+'"></option>';}).join('')+'</datalist>';}
+  var memBusy=false;
+  function chain(tasks){return tasks.reduce(function(pr,t){return pr.then(t);},Promise.resolve());}
+  function linkGroup(key,raw){
+    if(!db||memBusy) return; var ph=normWA(raw);
+    if(!ph){toast('Nomor WA tidak valid. Contoh: 0812-3456-7890');return;}
+    var c=customers().filter(function(x){return x.key===key;})[0]; if(!c) return;
+    var tasks=[]; if(!MEM[ph]) tasks.push(function(){return db.collection('members').doc(ph).set({name:c.name,phone:ph,at:new Date().toISOString()});});
+    c.list.forEach(function(b){tasks.push(function(){return db.collection('links').doc(b.id).set({phone:ph});});});
+    memBusy=true; toast('Menyimpan…');
+    chain(tasks).then(function(){memBusy=false; if(!MEM[ph]) MEM[ph]={name:c.name}; c.list.forEach(function(b){LINK[b.id]=ph;}); delete openP[key]; openP['p:'+ph]=1; toast(MEM[ph]&&MEM[ph].name!==c.name?'Digabung ke member '+MEM[ph].name:'Nomor WA tersimpan'); render();})
+    .catch(function(e){memBusy=false; toast('Gagal menyimpan ('+((e&&e.code)||'error')+'). Coba lagi.');});
+  }
+  function saveMember(){
+    var x=sheet.data, nm=val('m-name'), raw=val('m-phone'), ph=normWA(raw);
+    x.name=nm; x.phone=raw;
+    if(!nm){err='Isi nama member.';render();return;}
+    if(!ph){err='Nomor WA tidak valid. Contoh: 0812-3456-7890';render();return;}
+    if(ph!==x.orig && MEM[ph]){err='Nomor ini sudah dipakai member '+MEM[ph].name+'.';render();return;}
+    var tasks=[function(){return db.collection('members').doc(ph).set({name:nm,phone:ph,at:new Date().toISOString()});}];
+    if(x.orig && ph!==x.orig){
+      Object.keys(LINK).forEach(function(bid){ if(LINK[bid]===x.orig) tasks.push(function(){return db.collection('links').doc(bid).set({phone:ph});}); });
+      tasks.push(function(){return db.collection('members').doc(x.orig).delete();});
+    }
+    saving=true; render();
+    chain(tasks).then(function(){saving=false; MEM[ph]={name:nm}; if(x.orig&&ph!==x.orig){Object.keys(LINK).forEach(function(bid){if(LINK[bid]===x.orig)LINK[bid]=ph;}); delete MEM[x.orig];} sheet=null; err=''; toast('Member disimpan'); render();})
+    .catch(function(e){saving=false; err='Gagal menyimpan ('+((e&&e.code)||'error')+'). Coba lagi.'; render();});
   }
   function setPay(id,v){
     if(!db||payBusy[id]) return;
@@ -374,7 +432,7 @@ button{font:inherit;color:inherit}
       var line='Halo, saya mau booking padel '+(S.title||'')+' '+courtName(x.court)+', '+fmtDay(x.date)+' jam '+hh(x.h)+' – '+hh(x.h+1)+'. Apakah masih kosong?';
       h='<div><h3>Slot kosong</h3><div class="when">'+esc(courtName(x.court))+' · '+esc(fmtDay(x.date))+' · '+hh(x.h)+' – '+hh(x.h+1)+'</div></div>'+
         (S.contact?'<div><label>Hubungi penyelenggara untuk booking</label></div><div class="contact"><code>'+esc(S.contact)+'</code><button class="btn" data-act="copy" data-t="'+esc(S.contact)+'">Salin</button></div>':'<p class="when">Hubungi penyelenggara untuk booking slot ini.</p>')+
-        '<label>Contoh pesan</label><div class="msg">'+esc(line)+'</div><div class="btns"><button class="btn" data-act="copy" data-t="'+esc(line)+'">Salin pesan</button><button class="btn primary" data-act="close">Tutup</button></div>';
+        '<label>Contoh pesan</label><div class="msg">'+esc(line)+'</div><div class="btns"><button class="btn" data-act="copy" data-t="'+esc(line)+'">Salin pesan</button>'+waBtn(S.contact,line,'Kirim lewat WhatsApp')+'<button class="btn" data-act="close">Tutup</button></div>';
     } else if(sheet.kind==='view'){
       var cap=+x.capacity||0, n=(x.players||[]).length, pl='';
       (x.players||[]).forEach(function(p){pl+='<span class="pl">'+esc(p)+'</span>';});
@@ -382,7 +440,7 @@ button{font:inherit;color:inherit}
       h='<div><div class="eyebrow" style="color:var(--muted)">'+TYPE[x.type]+'</div><h3>'+esc(x.label||TYPE[x.type])+'</h3><div class="when">'+esc(courtName(x.court))+' · '+esc(fmtDay(x.date))+' · '+hh(x.start)+' – '+hh(x.end)+'</div></div>'+
         (x.type==='mabar'?'<div class="facts">'+(x.host?'<div><span>Dibuka oleh</span><b>'+esc(x.host)+'</b></div>':'')+(x.price?'<div><span>Biaya</span><b>'+esc(x.price)+'</b></div>':'')+(cap?'<div><span>Sisa tempat</span><b>'+(cap>n?(cap-n)+' dari '+cap:'Penuh')+'</b></div>':'')+'</div>':'')+
         (pl?'<div class="players">'+pl+'</div>':'')+(x.note?'<p style="margin:0">'+esc(x.note)+'</p>':'')+
-        (x.type==='mabar'&&cap>n&&(x.hostContact||S.contact)?(function(){var ct=x.hostContact||S.contact, msg='Halo'+(x.host&&x.hostContact?' '+x.host:'')+', saya mau ikut '+(x.label||'main bareng')+' di '+courtName(x.court)+', '+fmtDay(x.date)+' jam '+hh(x.start)+' – '+hh(x.end)+'. Masih ada tempat?';return '<label>Mau ikut? Hubungi '+(x.hostContact&&x.host?esc(x.host):'penyelenggara')+'</label><div class="contact"><code>'+esc(ct)+'</code><button class="btn" data-act="copy" data-t="'+esc(ct)+'">Salin kontak</button></div><div class="msg">'+esc(msg)+'</div><div class="btns"><button class="btn" data-act="copy" data-t="'+esc(msg)+'">Salin pesan</button></div>';})():'')+
+        (x.type==='mabar'&&cap>n&&(x.hostContact||S.contact)?(function(){var ct=x.hostContact||S.contact, msg='Halo'+(x.host&&x.hostContact?' '+x.host:'')+', saya mau ikut '+(x.label||'main bareng')+' di '+courtName(x.court)+', '+fmtDay(x.date)+' jam '+hh(x.start)+' – '+hh(x.end)+'. Masih ada tempat?';return '<label>Mau ikut? Hubungi '+(x.hostContact&&x.host?esc(x.host):'penyelenggara')+'</label><div class="contact"><code>'+esc(ct)+'</code><button class="btn" data-act="copy" data-t="'+esc(ct)+'">Salin kontak</button></div><div class="msg">'+esc(msg)+'</div><div class="btns"><button class="btn" data-act="copy" data-t="'+esc(msg)+'">Salin pesan</button>'+waBtn(ct,msg,'Kirim lewat WhatsApp')+'</div>';})():'')+
         '<div class="btns"><button class="btn primary" data-act="close">Tutup</button></div>';
     } else if(sheet.kind==='edit'){
       var courts=S.sites.map(function(st){return '<optgroup label="'+esc(st.name)+'">'+st.courts.map(function(c){return '<option value="'+esc(c.id)+'"'+(c.id===x.court?' selected':'')+'>'+esc(st.name+' · '+c.name)+'</option>';}).join('')+'</optgroup>';}).join('');
@@ -390,6 +448,7 @@ button{font:inherit;color:inherit}
         '<div class="seg" role="group" aria-label="Jenis">'+['booked','mabar','closed'].map(function(t){return '<button type="button" data-act="type" data-v="'+t+'" class="'+(x.type===t?'on':'')+'">'+TYPE[t]+'</button>';}).join('')+'</div>'+
         '<form id="ed" class="grid" novalidate>'+
         '<label class="wide">'+(x.type==='booked'?'Nama pemesan':x.type==='mabar'?'Nama sesi':'Keterangan')+'<input id="f-label" maxlength="60" value="'+esc(x.label)+'" placeholder="'+(x.type==='booked'?'Andi':x.type==='mabar'?'Mabar malam':'Perawatan lapangan')+'"></label>'+
+        (x.type!=='closed'&&isAdmin&&db?'<label class="wide">No. WA '+(x.type==='mabar'?'yang membuka':'pemesan')+' (privat)<input id="f-phone" type="tel" inputmode="tel" list="memlist" maxlength="20" value="'+esc(x.phone!=null?x.phone:fmtWA(LINK[x.id]))+'" placeholder="0812-xxxx-xxxx"><span class="hint" id="f-phone-hint">'+esc((function(){var p=normWA(x.phone!=null?x.phone:LINK[x.id]);return p&&MEM[p]?'Member: '+MEM[p].name:'Pilih dari daftar member atau ketik nomor baru';})())+'</span></label>'+memDatalist():'')+
         '<label>Tanggal<input id="f-date" type="date" value="'+esc(x.date)+'"></label>'+
         '<label>Lapangan<select id="f-court">'+courts+'</select></label>'+
         '<label>Mulai<select id="f-start">'+hourOpts(S.open,S.close-1,x.start)+'</select></label>'+
@@ -399,6 +458,11 @@ button{font:inherit;color:inherit}
         '</form>'+(x.id&&x.type!=='closed'&&isAdmin&&db?'<label>Pembayaran (tersimpan langsung, hanya kamu yang lihat)</label>'+paySeg(x.id):'')+(err?'<p class="err">'+esc(err)+'</p>':'')+
         '<div class="btns">'+(x.id?(confirmDel?'<button class="btn danger" data-act="del-yes">Ya, hapus</button><button class="btn" data-act="del-no">Batal hapus</button>':'<button class="btn danger" data-act="del">Hapus</button>'):'')+
         '<button class="btn" data-act="close">Batal</button><button class="btn primary" data-act="save"'+(saving?' disabled':'')+'>'+(saving?'Menyimpan…':'Simpan')+'</button></div>';
+    } else if(sheet.kind==='member'){
+      h='<div><h3>'+(x.orig?'Ubah member':'Member baru')+'</h3><div class="when">Nomor WA dipakai sebagai ID. Hanya kamu yang bisa melihatnya.</div></div><form id="mf" class="grid" novalidate>'+
+        '<label class="wide">Nama<input id="m-name" maxlength="40" value="'+esc(x.name)+'" placeholder="Pak Dimas"></label>'+
+        '<label class="wide">Nomor WA<input id="m-phone" type="tel" inputmode="tel" maxlength="20" value="'+esc(x.phone)+'" placeholder="0812-3456-7890"></label></form>'+(err?'<p class="err">'+esc(err)+'</p>':'')+
+        '<div class="btns"><button class="btn" data-act="close">Batal</button><button class="btn primary" data-act="save-member"'+(saving?' disabled':'')+'>'+(saving?'Menyimpan…':'Simpan')+'</button></div>';
     } else if(sheet.kind==='settings'){
       h='<div><h3>Pengaturan</h3><div class="when">Berlaku untuk semua orang yang membuka halaman ini.</div></div><form id="st" class="grid" novalidate>'+
         '<label class="wide">Judul<input id="s-title" maxlength="40" value="'+esc(x.title)+'"></label>'+
@@ -417,7 +481,7 @@ button{font:inherit;color:inherit}
     var hasEx=S.bookings.some(function(b){return b.example;});
     var tabs=isAdmin?'<div class="vtabs" role="tablist"><button role="tab" class="'+(view==='board'?'on':'')+'" data-act="view" data-v="board">Jadwal</button><button role="tab" class="'+(view==='hist'?'on':'')+'" data-act="view" data-v="hist">Riwayat & pembayaran</button></div>':'';
     if(isAdmin&&view==='hist'){app.innerHTML=heroHTML()+tabs+histHTML()+sheetHTML();return;}
-    app.innerHTML=heroHTML()+tabs+datesHTML()+'<section>'+boardHTML()+'</section>'+
+    app.innerHTML=heroHTML()+tabs+contactBar()+datesHTML()+'<section>'+boardHTML()+'</section>'+
       (isAdmin?'<p class="admin-note"><b>Mode admin.</b> Tekan slot kosong untuk menambah jadwal, atau tekan jadwal untuk mengubahnya. Orang lain hanya bisa melihat.</p>':'')+
       (isAdmin&&hasEx?'<p class="ex-note">Jadwal bergaris merah adalah contoh. Hapus lalu ganti dengan jadwal asli.</p>':'')+sheetHTML();
   }
@@ -454,6 +518,7 @@ button{font:inherit;color:inherit}
     if(document.getElementById('f-cap')){x.capacity=Math.max(1,Math.min(16,parseInt(val('f-cap'),10)||4)); x.players=val('f-players').split(',').map(function(s){return s.trim();}).filter(Boolean).slice(0,16);}
     if(document.getElementById('f-note')) x.note=val('f-note');
     if(document.getElementById('f-host')){x.host=val('f-host');x.hostContact=val('f-hc');x.price=val('f-price');}
+    if(document.getElementById('f-phone')) x.phone=val('f-phone');
     return x;
   }
 
@@ -466,10 +531,14 @@ button{font:inherit;color:inherit}
     else if(a==='view'){view=b.getAttribute('data-v');render();}
     else if(a==='mode'){showPay=b.getAttribute('data-v')==='pay';try{sessionStorage.setItem('padel-pay',showPay?'1':'0');}catch(_){}render();}
     else if(a==='hf'){hf=b.getAttribute('data-v');render();}
+    else if(a==='mem-new'){sheet=memberSheet('');err='';render();}
+    else if(a==='mem-edit'){sheet=memberSheet(b.getAttribute('data-p'));err='';render();}
+    else if(a==='save-member'){saveMember();}
+    else if(a==='link-group'){var k=b.getAttribute('data-k'), inp=document.getElementById('lk-'+k); linkGroup(k,inp?inp.value:'');}
     else if(a==='pay'){setPay(b.getAttribute('data-id'),b.getAttribute('data-v'));}
     else if(a==='site'){selSite=b.getAttribute('data-s');try{sessionStorage.setItem('padel-site',selSite);}catch(_){}render();}
     else if(a==='day'){sel=b.getAttribute('data-d');try{sessionStorage.setItem('padel-sel',sel);}catch(_){}render();}
-    else if(a==='close'){sheet=null;err='';confirmDel=false;render();}
+    else if(a==='close'){sheet=null;err='';confirmDel=false;pendingRender=false;render();}
     else if(a==='free'){
       var c=b.getAttribute('data-c'), h=+b.getAttribute('data-h');
       if(isAdmin) sheet={kind:'edit',data:{type:'booked',label:'',date:sel,court:c,start:h,end:Math.min(h+1,S.close),players:[],capacity:4,note:''}};
@@ -501,7 +570,17 @@ button{font:inherit;color:inherit}
       if(x.type==='mabar'){rec.host=x.host||'';rec.hostContact=x.hostContact||'';rec.price=x.price||'';}
       var n2=clone(),i=-1; n2.bookings.forEach(function(o,k){if(o.id===rec.id)i=k;});
       if(i>=0)n2.bookings[i]=rec; else n2.bookings.push(rec);
-      sel=rec.date; S.sites.forEach(function(st){if(st.courts.some(function(c){return c.id===rec.court;}))selSite=st.id;}); save(n2,'Jadwal disimpan');
+      sel=rec.date; S.sites.forEach(function(st){if(st.courts.some(function(c){return c.id===rec.court;}))selSite=st.id;});
+      var ph=(x.phone!=null&&rec.type!=='closed')?normWA(x.phone):undefined;
+      if(ph===null){err='Nomor WA tidak valid. Contoh: 0812-3456-7890, atau kosongkan.';render();return;}
+      if(db && ph!==undefined){
+        var tasks=[];
+        if(ph){ if(!MEM[ph]) tasks.push(function(){return db.collection('members').doc(ph).set({name:custName(rec)||fmtWA(ph),phone:ph,at:new Date().toISOString()});});
+          if(LINK[rec.id]!==ph) tasks.push(function(){return db.collection('links').doc(rec.id).set({phone:ph});}); }
+        else if(LINK[rec.id]) tasks.push(function(){return db.collection('links').doc(rec.id).delete();});
+        saving=true; render();
+        chain(tasks).then(function(){saving=false; save(n2,'Jadwal disimpan');}).catch(function(e){saving=false; err='Nomor WA gagal disimpan ('+((e&&e.code)||'error')+').'; render();});
+      } else save(n2,'Jadwal disimpan');
     }
     else if(a==='save-settings'){
       var op=+val('s-open'), cl=+val('s-close');
@@ -514,7 +593,8 @@ button{font:inherit;color:inherit}
       save(n3,'Pengaturan disimpan');
     }
   });
-  app.addEventListener('input',function(e){ if(e.target.id==='h-q'){ hq=e.target.value; var l=document.getElementById('h-list'); if(l) l.innerHTML=histListHTML(); } });
+  app.addEventListener('input',function(e){ if(e.target.id==='f-phone'){ var p=normWA(e.target.value), hn=document.getElementById('f-phone-hint'), lb=document.getElementById('f-label'), m=p&&MEM[p]; if(hn) hn.textContent=m?'Member: '+m.name:(p?'Member baru, akan dibuat saat disimpan':'Pilih dari daftar member atau ketik nomor baru'); if(m&&lb&&!lb.value&&sheet&&sheet.data.type==='booked') lb.value=m.name; return; }
+    if(e.target.id==='h-q'){ hq=e.target.value; var l=document.getElementById('h-list'); if(l) l.innerHTML=histListHTML(); } });
   app.addEventListener('toggle',function(e){ var d=e.target; if(d.classList&&d.classList.contains('cust')){ var k=d.getAttribute('data-k'); if(d.open) openP[k]=1; else delete openP[k]; } },true);
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&sheet&&!saving){sheet=null;err='';confirmDel=false;render();}});
 
